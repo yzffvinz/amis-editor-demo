@@ -1,4 +1,5 @@
 import {schema2component} from './AMISRenderer';
+import genDefaultSignature from "../libs/defaultSignature"
 
 export default schema2component(
     {
@@ -35,6 +36,14 @@ export default schema2component(
                     type: 'icon-picker',
                     label: '图标',
                     name: 'icon'
+                },
+
+                {
+                    type: 'editor',
+                    label: 'signature',
+                    name: 'signature',
+                    language: 'json',
+                    value: genDefaultSignature()
                 }
             ]
         }
