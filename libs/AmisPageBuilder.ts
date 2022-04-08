@@ -45,7 +45,7 @@ function buildFormItem(field: string, datatype: string, forMod = false): FormIte
     if (field === FIELD_ID) {
         input.type = forMod ? 'static' : null;
     } else {
-        if (datatype.includes('$api$')) {
+        if (datatype && datatype.includes('$api$')) {
             const [inputType, source] = datatype.split('$api$')
             input.source = source;
             input.type = 'select';
