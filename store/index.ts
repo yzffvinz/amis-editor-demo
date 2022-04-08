@@ -6,7 +6,7 @@ import axios from 'axios';
 const pageId = '62501125665bc5da48bf41e5';
 let pagIndex = 1;
 
-const HOST = 'http://v.liuwenzhe.com:3000';
+const HOST = '';
 
 function getPageConfig(): any {
     return axios.get(HOST + '/api/lc/pages/list', {
