@@ -3,11 +3,13 @@ import {PageStore} from './Page';
 import {when, reaction} from 'mobx';
 import axios from 'axios';
 
-const pageId = '6248fc790c50428d2307b041';
+const pageId = '62501125665bc5da48bf41e5';
 let pagIndex = 1;
 
+const HOST = 'http://v.liuwenzhe.com:3000';
+
 function getPageConfig(): any {
-    return axios.get('/api/lc/pages/list', {
+    return axios.get(HOST + '/api/lc/pages/list', {
         params: {
             where_field__id: pageId
         }
@@ -19,7 +21,7 @@ function getPageConfig(): any {
 
 
 function updatePageConfig(schema: any) {
-    axios.post('/api/lc/pages/modify', {
+    axios.post(HOST + '/api/lc/pages/modify', {
         _id: pageId,
         schema
     }).then(data => {
