@@ -6,6 +6,8 @@ import {MainStore} from './store/index';
 import RootRoute from './route/index';
 import copy from 'copy-to-clipboard';
 
+axios.defaults.withCredentials = true;
+
 export default function(): JSX.Element {
     const store = ((window as any).store = MainStore.create(
         {},

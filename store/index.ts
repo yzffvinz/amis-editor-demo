@@ -1,7 +1,32 @@
 import {types, getEnv, applySnapshot, getSnapshot} from 'mobx-state-tree';
 import {PageStore} from './Page';
 import {when, reaction} from 'mobx';
+import axios from 'axios';
+
+const pageId = '6248fc790c50428d2307b041';
 let pagIndex = 1;
+
+function getPageConfig(): any {
+    return axios.get('/api/lc/pages/list', {
+        params: {
+            where_field__id: pageId
+        }
+    }).then((data: any) => {
+        const {schema, version: v} = data?.data?.data?.rows?.[0];
+        return schema
+    })
+}
+
+
+function updatePageConfig(schema: any) {
+    axios.post('/api/lc/pages/modify', {
+        _id: pageId,
+        schema
+    }).then(data => {
+        console.log(data)
+    });
+}
+
 export const MainStore = types
     .model('MainStore', {
         pages: types.optional(types.array(PageStore), [
@@ -98,18 +123,14 @@ export const MainStore = types
             setPreview,
             setIsMobile,
             afterCreate() {
-                // persist store
-                if (typeof window !== 'undefined' && window.localStorage) {
-                    const storeData = window.localStorage.getItem('store');
-                    if (storeData) applySnapshot(self, JSON.parse(storeData));
+                getPageConfig().then((schema: any) => applySnapshot(self, schema))
 
-                    reaction(
-                        () => getSnapshot(self),
-                        json => {
-                            window.localStorage.setItem('store', JSON.stringify(json));
-                        }
-                    );
-                }
+                reaction(
+                    () => getSnapshot(self),
+                    (json: any) => {
+                        updatePageConfig(json)
+                    }
+                );
             }
         };
     });

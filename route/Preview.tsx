@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 import NotFound from './NotFound';
 import AMISRenderer from '../component/AMISRenderer';
 import AddPageModal from '../component/AddPageModal';
+import { buildPageBody } from '../libs/AmisPageBuilder';
 
 function isActive(link: any, location: any) {
     const ret = matchPath(location.pathname, {
@@ -147,13 +148,13 @@ export default inject('store')(
             );
         }
 
-        function handleConfirm(value: {label: string; icon: string; path: string}) {
+        function handleConfirm(value: {label: string; icon: string; path: string, signature: string}) {
             store.addPage({
                 ...value,
                 schema: {
                     type: 'page',
                     title: value.label,
-                    body: '这是你刚刚新增的页面。'
+                    body: buildPageBody(value.signature)
                 }
             });
             store.setAddPageIsOpen(false);
