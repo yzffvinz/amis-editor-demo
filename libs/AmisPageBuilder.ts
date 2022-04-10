@@ -1,6 +1,6 @@
 import {
     FIELD_ID, FIELD_TYPES_CONFIG, STATIC_FIELDS,
-    WHERE_FIELD_PREFIX, WHERE_OP_PREFIX, WHERE_OP_TYPE
+    WHERE_FIELD_PREFIX, WHERE_OP_PREFIX, WHERE_TYPE_PREFIX
 } from './Constants';
 
 interface FormItem {
@@ -215,10 +215,10 @@ export function buildPageBody(signatureJson: string) {
     const raw = JSON.parse(signatureJson);
     const {domain} = raw.data;
     const apis = {
-        queryApi: `/api/lc/${domain}/list`,
-        addApi: `/api/lc/${domain}/add`,
-        deleteApi: `/api/lc/${domain}/delete/\${_id}`,
-        modifyApi: `/api/lc/${domain}/modify`,
+        queryApi: `SERVER_HOST/api/lc/${domain}/list`,
+        addApi: `SERVER_HOST/api/lc/${domain}/add`,
+        deleteApi: `SERVER_HOST/api/lc/${domain}/delete/\${_id}`,
+        modifyApi: `SERVER_HOST/api/lc/${domain}/modify`,
     }
 
     const signature = Object.assign(apis, raw) as PageSignature

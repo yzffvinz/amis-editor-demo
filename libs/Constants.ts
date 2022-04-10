@@ -1,3 +1,5 @@
+export const SERVER_HOST = 'http://v.liuwenzhe.com:3000';
+
 export const FIELD_ID = '_id';
 
 export const FIELD_TYPES_CONFIG = [
@@ -21,4 +23,4 @@ export const STATIC_FIELDS: {[key: string]: string} = {
 
 export const WHERE_FIELD_PREFIX = 'where_field_';
 export const WHERE_OP_PREFIX = 'where_op_';
-export const WHERE_OP_TYPE = 'where_type_';
+export const WHERE_TYPE_PREFIX = 'where_type_';

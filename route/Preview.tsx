@@ -8,6 +8,7 @@ import NotFound from './NotFound';
 import AMISRenderer from '../component/AMISRenderer';
 import AddPageModal from '../component/AddPageModal';
 import { buildPageBody } from '../libs/AmisPageBuilder';
+import initPage from '../libs/InitAmisPage';
 
 function isActive(link: any, location: any) {
     const ret = matchPath(location.pathname, {

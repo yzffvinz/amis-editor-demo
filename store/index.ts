@@ -2,31 +2,57 @@ import {types, getEnv, applySnapshot, getSnapshot} from 'mobx-state-tree';
 import {PageStore} from './Page';
 import {when, reaction} from 'mobx';
 import axios from 'axios';
+import { toast } from 'amis';
 
-const pageId = '62501125665bc5da48bf41e5';
+let schemaId = '';
+const moduleId = 'blog_config';
 let pagIndex = 1;
+let updateLoading = false;
 
-const HOST = '';
+const HOST = 'http://v.liuwenzhe.com:3000';
 
 function getPageConfig(): any {
-    return axios.get(HOST + '/api/lc/pages/list', {
-        params: {
-            where_field__id: pageId
-        }
-    }).then((data: any) => {
-        const {schema, version: v} = data?.data?.data?.rows?.[0];
+    function doQuery() {
+        return axios.get(HOST + '/api/lc/pages/list', {
+            params: {
+                where_field_moduleId: moduleId
+            }
+        }).then((data: any) => {
+            if (data.data.status) {
+                toast.error(data.data.msg)
+            } else {
+                const {schema, version: v} = data?.data?.data?.rows?.[0] || {};
+                schemaId = data?.data?.data?.rows?.[0]?._id;
+                return schema
+            }
+        })
+    }
+    return doQuery().then(schema => {
         return schema
-    })
+            ? schema
+            : updatePageConfig({}).then(doQuery)
+    });
 }
 
-
-function updatePageConfig(schema: any) {
-    axios.post(HOST + '/api/lc/pages/modify', {
-        _id: pageId,
-        schema
-    }).then(data => {
-        console.log(data)
-    });
+function updatePageConfig(schema: any): any {
+    if (schemaId) {
+        return axios.post(HOST + '/api/lc/pages/modify', {
+            _id: schemaId,
+            moduleId,
+            schema
+        }).then(data => {
+            if (data.data.status) {
+                toast.error(data.data.msg)
+            }
+        });
+    } else {
+        return axios.post(HOST + '/api/lc/pages/add', {
+            moduleId,
+            schema
+        }).then(data => {
+            schemaId = data.data.insertedId;
+        });
+    }
 }
 
 export const MainStore = types

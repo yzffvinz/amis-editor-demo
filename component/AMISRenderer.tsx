@@ -5,6 +5,8 @@ import {getEnv} from 'mobx-state-tree';
 import {IMainStore} from '../store';
 import qs from 'qs';
 import {render, utils, filter} from 'amis';
+import { SERVER_HOST } from '../libs/Constants';
+
 
 export function schema2component(schema: any, transform?: Function, session: string = 'page') {
     interface SchemaRendererProps extends RouteComponentProps<{}> {
@@ -158,10 +160,12 @@ export function schema2component(schema: any, transform?: Function, session: str
                 embedMode,
                 ...rest
             } = this.props;
-            const finalSchema = schemaProp || schema;
+            let finalSchema = schemaProp || schema;
             let body: React.ReactNode;
 
             finalSchema.type || (finalSchema.type = 'page');
+
+            finalSchema = JSON.parse(JSON.stringify(finalSchema).replace(/SERVER_HOST/g, SERVER_HOST))
 
             body = render(
                 finalSchema,
