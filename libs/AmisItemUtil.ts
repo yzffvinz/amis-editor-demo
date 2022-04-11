@@ -121,7 +121,7 @@ export default function generateAmisItem(itemType: VItemType, datatype: VDataTyp
         const comps = {
             'column': 'text',
             'filter': 'input-text',
-            'input': 'textarea'
+            'input': 'input-rich-text'
         };
         Object.assign(queryField, {
             type: comps[itemType],
@@ -132,7 +132,7 @@ export default function generateAmisItem(itemType: VItemType, datatype: VDataTyp
         const comps = {
             'column': 'text',
             'filter': 'input-text',
-            'input': 'input-rich-text',
+            'input': 'textarea',
         };
         Object.assign(queryField, {
             type: comps[itemType],
