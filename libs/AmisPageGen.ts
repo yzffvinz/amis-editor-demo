@@ -118,7 +118,8 @@ function buildCrud(title: string, apis: VApis, pageSchema: VPageSchema) {
         filter: {
             title: `${title} 查询条件`,
             body: buildItems('filter', pageSchema)
-        }
+        },
+        footable: true
     };
 }
 
