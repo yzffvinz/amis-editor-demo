@@ -26,7 +26,7 @@ export function normalizeItmeProps(name: string, type: any, filter?: any): VData
 }
 
 export default function generateAmisItem(itemType: VItemType, datatype: VDataType) {
-    const { name, type, api, op } = datatype;
+    let { name, type, api, op } = datatype;
     const items = [];
     const queryField = {
         name: itemType === 'filter' ? `${WHERE_FIELD_PREFIX}${name}` : name,
@@ -89,6 +89,11 @@ export default function generateAmisItem(itemType: VItemType, datatype: VDataTyp
             'filter': 'input-date-range',
             'input': 'input-date'
         }
+
+        if (itemType === 'filter') {
+            op = 'range';
+        }
+
         const formatKey = itemType === 'column' ? 'valueFormat' : 'format';
         Object.assign(queryField, {
             type: comps[itemType],
@@ -101,6 +106,11 @@ export default function generateAmisItem(itemType: VItemType, datatype: VDataTyp
             'filter': 'input-datetime-range',
             'input': 'input-datetime'
         }
+
+        if (itemType === 'filter') {
+            op = 'range';
+        }
+
         const formatKey = itemType === 'column' ? 'valueFormat' : 'format';
         Object.assign(queryField, {
             type: comps[itemType],
