@@ -3,17 +3,17 @@ import {PageStore} from './Page';
 import {when, reaction} from 'mobx';
 import axios from 'axios';
 import { toast } from 'amis';
+import { SERVER_HOST } from '../libs/Constants';
 
 let schemaId = '';
 const moduleId = 'blog_config';
 let pagIndex = 1;
 let updateLoading = false;
 
-const HOST = 'http://v.liuwenzhe.com:3000';
 
 function getPageConfig(): any {
     function doQuery() {
-        return axios.get(HOST + '/api/lc/pages/list', {
+        return axios.get(SERVER_HOST + '/api/lc/pages/list', {
             params: {
                 where_field_moduleId: moduleId
             }
@@ -36,7 +36,7 @@ function getPageConfig(): any {
 
 function updatePageConfig(schema: any): any {
     if (schemaId) {
-        return axios.post(HOST + '/api/lc/pages/modify', {
+        return axios.post(SERVER_HOST + '/api/lc/pages/modify', {
             _id: schemaId,
             moduleId,
             schema
@@ -46,7 +46,7 @@ function updatePageConfig(schema: any): any {
             }
         });
     } else {
-        return axios.post(HOST + '/api/lc/pages/add', {
+        return axios.post(SERVER_HOST + '/api/lc/pages/add', {
             moduleId,
             schema
         }).then(data => {
