@@ -1,32 +1,35 @@
-import { Select } from 'amis';
 import {
     WHERE_FIELD_PREFIX, WHERE_OP_PREFIX, WHERE_TYPE_PREFIX
 } from './Constants';
 
-type VItemType = 'input' | 'filter' | 'column'
+export type VItemType = 'input' | 'filter' | 'column'
 
-interface VItemOption {
-    source: string
-}
-
-interface VDataType {
+export interface VDataType {
     name: string;
     type: string;
     api?: string;
     op?: string;
 }
 
-function buildOp() {
+export function normalizeItmeProps(name: string, type: any, filter?: any): VDataType {
+    const props: VDataType = { name, type: 'string' };
+    if (typeof type === 'string') {
+        props.type = type;
+    } else if (type) {
+        type.type && (props.type = type.type);
+        type.api && (props.api = type.api);
+    }
+    if (filter && filter.op) {
+        props.op = filter.op;
+    }
+    return props;
 }
 
-function buildType() {
-}
-
-export default function generateAmisItem(datatype: VDataType, itemType: VItemType, options?: VItemOption) {
+export default function generateAmisItem(itemType: VItemType, datatype: VDataType) {
     const { name, type, api, op } = datatype;
     const items = [];
     const queryField = {
-        name: itemType === 'filter' ? `${WHERE_FIELD_PREFIX}name` : name,
+        name: itemType === 'filter' ? `${WHERE_FIELD_PREFIX}${name}` : name,
         label: name
     }
     if (type === 'boolean') {
@@ -47,6 +50,14 @@ export default function generateAmisItem(datatype: VDataType, itemType: VItemTyp
             type: itemType === 'column' ? 'text' : 'input-number'
         });
     }
+    else if (itemType === 'filter' && ['option', 'set', 'array'].includes(type)) {
+        Object.assign(queryField, {
+            type: 'select',
+            searchable: true,
+            clearable: true,
+            source: api,
+        });
+    }
     else if (['option', 'set'].includes(type)) {
         Object.assign(queryField, {
             type: 'select',
@@ -55,17 +66,18 @@ export default function generateAmisItem(datatype: VDataType, itemType: VItemTyp
             multiple: type === 'set',
             disabled: itemType === 'column',
             source: api,
-            joinValues: false
+            joinValues: false,
+            extractValue: true
         });
     }
-    else if (type === 'array') {
+    else if (type === 'array' && ['input', 'column'].includes(itemType)) {
         Object.assign(queryField, {
             type: 'input-array',
             disabled: itemType === 'column',
             items: {
                 type: 'select',
                 searchable: true,
-                source: api,
+                source: api
             },
             draggable: true,
             joinValues: false
@@ -117,21 +129,20 @@ export default function generateAmisItem(datatype: VDataType, itemType: VItemTyp
             breakpoint: '*'
         });
     }
-
     items.push(queryField);
 
-    if (type === 'number') {
+    if (itemType === 'filter' && ['number', 'boolean'].includes(type)) {
         items.push({
             type: 'input-text',
             name: `${WHERE_TYPE_PREFIX}${name}`,
             label: `${name}-type`,
             visible: false,
             clearValueOnHidden: false,
-            value: 'number'
+            value: type
         })
     }
 
-    if (op) {
+    if (itemType === 'filter' && op) {
         items.push({
             type: 'input-text',
             name: `${WHERE_OP_PREFIX}${name}`,

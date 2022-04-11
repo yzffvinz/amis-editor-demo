@@ -7,8 +7,7 @@ import {Link} from 'react-router-dom';
 import NotFound from './NotFound';
 import AMISRenderer from '../component/AMISRenderer';
 import AddPageModal from '../component/AddPageModal';
-import { buildPageBody } from '../libs/AmisPageBuilder';
-import initPage from '../libs/InitAmisPage';
+import initPage from '../libs/AmisPageGen';
 
 function isActive(link: any, location: any) {
     const ret = matchPath(location.pathname, {
@@ -155,7 +154,7 @@ export default inject('store')(
                 schema: {
                     type: 'page',
                     title: value.label,
-                    body: buildPageBody(value.signature)
+                    body: initPage(value.label, value.signature)
                 }
             });
             store.setAddPageIsOpen(false);
@@ -188,3 +187,4 @@ export default inject('store')(
         );
     })
 );
+
