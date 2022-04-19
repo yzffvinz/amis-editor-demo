@@ -55,7 +55,10 @@ export default function generateAmisItem(itemType: VItemType, datatype: VDataTyp
             type: 'select',
             searchable: true,
             clearable: true,
-            source: api,
+            source: {
+                url: api,
+                cache: 30000
+            },
         });
     }
     else if (['option', 'set'].includes(type)) {
@@ -65,7 +68,10 @@ export default function generateAmisItem(itemType: VItemType, datatype: VDataTyp
             clearable: true,
             multiple: type === 'set',
             disabled: itemType === 'column',
-            source: api,
+            source: {
+                url: api,
+                cache: 30000
+            },
             joinValues: false,
             extractValue: true
         });
@@ -77,7 +83,10 @@ export default function generateAmisItem(itemType: VItemType, datatype: VDataTyp
             items: {
                 type: 'select',
                 searchable: true,
-                source: api
+                source: {
+                    url: api,
+                    cache: 30000
+                },
             },
             draggable: true,
             joinValues: false

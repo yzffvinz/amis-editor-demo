@@ -148,6 +148,20 @@ export default inject('store')(
             );
         }
 
+        function renderFootter() {
+            return (
+                <div style={{
+                    width: '100%',
+                    padding: '32px'
+                }}>
+                    <div style={{textAlign: 'right'}}>
+                        <span>Vincent Admin</span>
+                        <a href="https://beian.miit.gov.cn/" target="_blank"> 京ICP备2021038687号-1 </a>
+                    </div>
+                </div>
+            );
+        }
+
         function handleConfirm(value: {label: string; icon: string; path: string, signature: string}) {
             store.addPage({
                 ...value,
@@ -166,6 +180,7 @@ export default inject('store')(
                 header={renderHeader()}
                 folded={store.asideFolded}
                 offScreen={store.offScreen}
+                footer={renderFootter()}
             >
                 <Switch>
                     {store.pages.map(item => (

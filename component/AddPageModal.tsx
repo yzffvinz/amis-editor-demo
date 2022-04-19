@@ -40,7 +40,7 @@ export default schema2component(
 
                 {
                     type: 'editor',
-                    label: 'signature',
+                    label: 'init json',
                     name: 'signature',
                     language: 'json',
                     value: genDefaultSignature()
