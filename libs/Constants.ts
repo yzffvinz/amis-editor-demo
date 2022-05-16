@@ -1,4 +1,5 @@
 export const SERVER_HOST = '';
+// export const SERVER_HOST = 'http://v.liuwenzhe.com:3000';
 // export const SERVER_HOST = 'https://www.liuwenzhe.com';
 
 export const FIELD_ID = '_id';
